@@ -23,15 +23,16 @@ export default function TabLayout() {
           backgroundColor:
             Platform.OS === 'ios' ? 'transparent' : colors.background,
           borderTopColor: colors.border,
-          height: 72,
-          paddingBottom: Platform.OS === 'ios' ? 24 : 12,
-          paddingTop: 12,
+          height: Platform.OS === 'ios' ? 84 : 60,
+          paddingBottom: Platform.OS === 'ios' ? 28 : 8,
+          paddingTop: 8,
           position: 'absolute',
           bottom: 0,
           left: 0,
           right: 0,
           elevation: 0,
           shadowOpacity: 0,
+          borderTopWidth: 0.5,
         },
         tabBarBackground: () =>
           Platform.OS === 'ios' ? (
@@ -42,9 +43,9 @@ export default function TabLayout() {
             />
           ) : null,
         tabBarLabelStyle: {
-          fontSize: 12,
-          fontWeight: '600',
-          marginTop: 4,
+          fontSize: 11,
+          fontWeight: '500',
+          marginTop: 2,
         },
         header: (props) => <CustomHeader {...props} />,
       }}
@@ -55,7 +56,7 @@ export default function TabLayout() {
           title: 'Home',
           tabBarIcon: ({ color, size }) => (
             <Animated.View entering={FadeIn}>
-              <Home size={size} color={color} strokeWidth={2} />
+              <Home size={24} color={color} strokeWidth={2} />
             </Animated.View>
           ),
         }}
@@ -66,7 +67,7 @@ export default function TabLayout() {
           title: 'Explore',
           tabBarIcon: ({ color, size }) => (
             <Animated.View entering={FadeIn}>
-              <Search size={size} color={color} strokeWidth={2} />
+              <Search size={24} color={color} strokeWidth={2} />
             </Animated.View>
           ),
         }}
@@ -77,7 +78,7 @@ export default function TabLayout() {
           title: 'Post',
           tabBarIcon: ({ color, size }) => (
             <Animated.View entering={FadeIn}>
-              <PlusCircle size={size} color={color} strokeWidth={2} />
+              <PlusCircle size={24} color={color} strokeWidth={2} />
             </Animated.View>
           ),
         }}
@@ -88,7 +89,7 @@ export default function TabLayout() {
           title: 'Brands',
           tabBarIcon: ({ color, size }) => (
             <Animated.View entering={FadeIn}>
-              <ShoppingBag size={size} color={color} strokeWidth={2} />
+              <ShoppingBag size={24} color={color} strokeWidth={2} />
             </Animated.View>
           ),
         }}
@@ -99,7 +100,7 @@ export default function TabLayout() {
           title: 'Profile',
           tabBarIcon: ({ color, size }) => (
             <Animated.View entering={FadeIn}>
-              <User size={size} color={color} strokeWidth={2} />
+              <User size={24} color={color} strokeWidth={2} />
             </Animated.View>
           ),
         }}

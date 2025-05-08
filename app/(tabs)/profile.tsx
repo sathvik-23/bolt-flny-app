@@ -6,7 +6,6 @@ import {
   Image,
   ScrollView,
   Pressable,
-  Dimensions,
 } from 'react-native';
 import { useTheme } from '@/hooks/useTheme';
 import {
@@ -16,13 +15,8 @@ import {
   Award,
   MapPin,
   CalendarDays,
-  Edit2,
-  Share2,
+  CreditCard as Edit2,
 } from 'lucide-react-native';
-import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
-import { BlurView } from 'expo-blur';
-
-const SCREEN_WIDTH = Dimensions.get('window').width;
 
 export default function ProfileScreen() {
   const { colors } = useTheme();
@@ -36,28 +30,20 @@ export default function ProfileScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <Animated.View entering={FadeIn.duration(400)} style={styles.header}>
+      <View style={styles.header}>
         <View style={styles.headerTop}>
           <View style={styles.placeholder} />
           <Text style={[styles.profileTitle, { color: colors.text }]}>
             Profile
           </Text>
-          <View style={styles.headerButtons}>
-            <Pressable style={styles.headerButton}>
-              <Share2 size={24} color={colors.text} />
-            </Pressable>
-            <Pressable style={styles.headerButton}>
-              <Settings size={24} color={colors.text} />
-            </Pressable>
-          </View>
+          <Pressable style={styles.settingsButton}>
+            <Settings size={24} color={colors.text} />
+          </Pressable>
         </View>
-      </Animated.View>
+      </View>
 
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        <Animated.View
-          entering={FadeInDown.delay(200).springify()}
-          style={styles.profileHeader}
-        >
+      <ScrollView style={styles.content}>
+        <View style={styles.profileHeader}>
           <View style={styles.coverImageContainer}>
             <Image
               source={{
@@ -65,11 +51,14 @@ export default function ProfileScreen() {
               }}
               style={styles.coverImage}
             />
-            <BlurView intensity={80} tint="dark" style={styles.coverOverlay}>
-              <Pressable style={[styles.editCoverButton]}>
-                <Edit2 size={16} color={colors.text} />
-              </Pressable>
-            </BlurView>
+            <Pressable
+              style={[
+                styles.editCoverButton,
+                { backgroundColor: colors.background },
+              ]}
+            >
+              <Edit2 size={16} color={colors.text} />
+            </Pressable>
           </View>
 
           <View style={styles.profileImageContainer}>
@@ -99,24 +88,22 @@ export default function ProfileScreen() {
               @alexjohnson
             </Text>
 
-            <View style={styles.profileDetails}>
-              <View style={styles.profileDetail}>
-                <MapPin size={16} color={colors.textSecondary} />
-                <Text
-                  style={[styles.detailText, { color: colors.textSecondary }]}
-                >
-                  New York, NY
-                </Text>
-              </View>
+            <View style={styles.locationContainer}>
+              <MapPin size={16} color={colors.textSecondary} />
+              <Text
+                style={[styles.locationText, { color: colors.textSecondary }]}
+              >
+                New York, NY
+              </Text>
+            </View>
 
-              <View style={styles.profileDetail}>
-                <CalendarDays size={16} color={colors.textSecondary} />
-                <Text
-                  style={[styles.detailText, { color: colors.textSecondary }]}
-                >
-                  Joined March 2023
-                </Text>
-              </View>
+            <View style={styles.joinedContainer}>
+              <CalendarDays size={16} color={colors.textSecondary} />
+              <Text
+                style={[styles.joinedText, { color: colors.textSecondary }]}
+              >
+                Joined March 2023
+              </Text>
             </View>
 
             <Text style={[styles.profileBio, { color: colors.text }]}>
@@ -167,9 +154,10 @@ export default function ProfileScreen() {
               style={[
                 styles.editProfileButton,
                 {
-                  backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                  paddingHorizontal: 20,
-                  paddingVertical: 10,
+                  backgroundColor: colors.background,
+                  borderColor: colors.border,
+                  paddingHorizontal: 16,
+                  paddingVertical: 8,
                   marginTop: 16,
                 },
               ]}
@@ -179,12 +167,9 @@ export default function ProfileScreen() {
               </Text>
             </Pressable>
           </View>
-        </Animated.View>
+        </View>
 
-        <Animated.View
-          entering={FadeInDown.delay(300).springify()}
-          style={[styles.tabsContainer]}
-        >
+        <View style={[styles.tabsContainer, { borderColor: colors.border }]}>
           {tabs.map((tab) => (
             <Pressable
               key={tab.id}
@@ -192,7 +177,7 @@ export default function ProfileScreen() {
                 styles.tabButton,
                 selectedTab === tab.id && [
                   styles.activeTab,
-                  { backgroundColor: 'rgba(255, 255, 255, 0.1)' },
+                  { borderBottomColor: colors.primary },
                 ],
               ]}
               onPress={() => setSelectedTab(tab.id)}
@@ -218,19 +203,12 @@ export default function ProfileScreen() {
               </Text>
             </Pressable>
           ))}
-        </Animated.View>
+        </View>
 
         {selectedTab === 'posts' && (
-          <Animated.View
-            entering={FadeInDown.delay(400).springify()}
-            style={styles.postsGrid}
-          >
-            {[1, 2, 3, 4, 5, 6].map((item, index) => (
-              <Animated.View
-                key={item}
-                entering={FadeInDown.delay(500 + index * 100).springify()}
-                style={styles.postItem}
-              >
+          <View style={styles.postsGrid}>
+            {[1, 2, 3, 4, 5, 6].map((item) => (
+              <View key={item} style={styles.postItem}>
                 <Image
                   source={{
                     uri: `https://images.pexels.com/photos/${
@@ -241,34 +219,13 @@ export default function ProfileScreen() {
                   }}
                   style={styles.postImage}
                 />
-                <BlurView intensity={80} tint="dark" style={styles.postOverlay}>
-                  <View style={styles.postStats}>
-                    <View style={styles.postStat}>
-                      <Text
-                        style={[styles.postStatText, { color: colors.text }]}
-                      >
-                        ❤️ 1.2K
-                      </Text>
-                    </View>
-                    <View style={styles.postStat}>
-                      <Text
-                        style={[styles.postStatText, { color: colors.text }]}
-                      >
-                        💬 48
-                      </Text>
-                    </View>
-                  </View>
-                </BlurView>
-              </Animated.View>
+              </View>
             ))}
-          </Animated.View>
+          </View>
         )}
 
         {selectedTab === 'saved' && (
-          <Animated.View
-            entering={FadeInDown.delay(400).springify()}
-            style={styles.emptySavedContainer}
-          >
+          <View style={styles.emptySavedContainer}>
             <Bookmark size={48} color={colors.textSecondary} />
             <Text style={[styles.emptyTitle, { color: colors.text }]}>
               No saved items yet
@@ -278,19 +235,21 @@ export default function ProfileScreen() {
             >
               Items you save will appear here
             </Text>
-          </Animated.View>
+          </View>
         )}
 
         {selectedTab === 'badges' && (
-          <Animated.View
-            entering={FadeInDown.delay(400).springify()}
-            style={styles.badgesContainer}
-          >
-            {[1, 2, 3].map((item, index) => (
-              <Animated.View
+          <View style={styles.badgesContainer}>
+            {[1, 2, 3].map((item) => (
+              <View
                 key={item}
-                entering={FadeInDown.delay(500 + index * 100).springify()}
-                style={[styles.badgeItem]}
+                style={[
+                  styles.badgeItem,
+                  {
+                    backgroundColor: colors.cardBackground,
+                    borderColor: colors.border,
+                  },
+                ]}
               >
                 <View
                   style={[
@@ -311,9 +270,9 @@ export default function ProfileScreen() {
                 >
                   Created 10 posts that received 100+ likes
                 </Text>
-              </Animated.View>
+              </View>
             ))}
-          </Animated.View>
+          </View>
         )}
       </ScrollView>
     </View>
@@ -336,16 +295,12 @@ const styles = StyleSheet.create({
   placeholder: {
     width: 24,
   },
-  headerButtons: {
-    flexDirection: 'row',
-    gap: 12,
-  },
-  headerButton: {
-    padding: 4,
-  },
   profileTitle: {
-    fontSize: 20,
-    fontWeight: '700',
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  settingsButton: {
+    padding: 4,
   },
   content: {
     flex: 1,
@@ -354,48 +309,48 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   coverImageContainer: {
-    height: 180,
+    height: 150,
     position: 'relative',
   },
   coverImage: {
     width: '100%',
     height: '100%',
   },
-  coverOverlay: {
+  editCoverButton: {
     position: 'absolute',
     right: 12,
     bottom: 12,
-    borderRadius: 20,
-    overflow: 'hidden',
-  },
-  editCoverButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
   },
   profileImageContainer: {
     alignItems: 'center',
-    marginTop: -60,
+    marginTop: -50,
   },
   profileImage: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
+    width: 100,
+    height: 100,
+    borderRadius: 50,
     borderWidth: 4,
-    borderColor: 'rgba(255, 255, 255, 0.1)',
+    borderColor: 'white',
   },
   editProfileButton: {
     position: 'absolute',
     right: -4,
     bottom: 0,
-    width: 36,
-    height: 36,
-    borderRadius: 18,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
+    borderWidth: 1,
+  },
+  editProfileText: {
+    fontWeight: '500',
+    fontSize: 14,
   },
   profileInfo: {
     alignItems: 'center',
@@ -403,68 +358,62 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   profileName: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: '700',
   },
   profileUsername: {
     fontSize: 16,
     marginTop: 2,
-    opacity: 0.8,
   },
-  profileDetails: {
+  locationContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 12,
-    gap: 16,
+    marginTop: 8,
   },
-  profileDetail: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-  },
-  detailText: {
+  locationText: {
+    marginLeft: 4,
     fontSize: 14,
-    fontWeight: '500',
+  },
+  joinedContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 4,
+  },
+  joinedText: {
+    marginLeft: 4,
+    fontSize: 14,
   },
   profileBio: {
-    fontSize: 15,
     textAlign: 'center',
-    marginTop: 16,
+    marginTop: 12,
     lineHeight: 22,
-    paddingHorizontal: 24,
   },
   statsContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
+    justifyContent: 'space-between',
     marginTop: 20,
-    paddingHorizontal: 24,
+    width: '100%',
   },
   statItem: {
-    flex: 1,
     alignItems: 'center',
+    flex: 1,
   },
   statNumber: {
     fontSize: 18,
     fontWeight: '700',
   },
   statLabel: {
-    fontSize: 13,
-    marginTop: 2,
+    fontSize: 14,
+    marginTop: 4,
   },
   statDivider: {
     width: 1,
-    height: 24,
-    marginHorizontal: 16,
-  },
-  editProfileText: {
-    fontWeight: '600',
-    fontSize: 15,
+    height: 36,
   },
   tabsContainer: {
     flexDirection: 'row',
-    paddingHorizontal: 16,
-    marginBottom: 16,
-    gap: 8,
+    marginTop: 24,
+    borderBottomWidth: 1,
   },
   tabButton: {
     flex: 1,
@@ -472,93 +421,71 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 12,
-    borderRadius: 16,
-    gap: 8,
-  },
-  activeTab: {
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
   },
   tabLabel: {
-    fontSize: 15,
-    fontWeight: '600',
+    marginLeft: 4,
+    fontWeight: '500',
+  },
+  activeTab: {
+    borderBottomWidth: 2,
   },
   postsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    paddingHorizontal: 16,
-    gap: 8,
+    padding: 1,
   },
   postItem: {
-    width: (SCREEN_WIDTH - 40) / 3,
-    height: (SCREEN_WIDTH - 40) / 3,
-    borderRadius: 16,
-    overflow: 'hidden',
+    width: '33.33%',
+    aspectRatio: 1,
+    padding: 1,
   },
   postImage: {
     width: '100%',
     height: '100%',
   },
-  postOverlay: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    padding: 8,
-  },
-  postStats: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  postStat: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-  },
-  postStatText: {
-    fontSize: 12,
-    fontWeight: '600',
-  },
   emptySavedContainer: {
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 48,
+    paddingHorizontal: 24,
   },
   emptyTitle: {
     fontSize: 18,
     fontWeight: '600',
     marginTop: 16,
+    marginBottom: 8,
   },
   emptySubtitle: {
-    fontSize: 15,
-    marginTop: 4,
-    opacity: 0.8,
+    textAlign: 'center',
+    fontSize: 14,
+    lineHeight: 20,
   },
   badgesContainer: {
-    paddingHorizontal: 16,
-    gap: 12,
+    padding: 16,
   },
   badgeItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    borderRadius: 12,
+    borderWidth: 1,
     padding: 16,
-    borderRadius: 16,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    gap: 16,
+    marginBottom: 16,
+    alignItems: 'center',
   },
   badgeIconContainer: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
+    width: 64,
+    height: 64,
+    borderRadius: 32,
     alignItems: 'center',
     justifyContent: 'center',
+    marginBottom: 12,
   },
   badgeName: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: '600',
-    marginBottom: 2,
+    marginBottom: 8,
   },
   badgeDescription: {
+    textAlign: 'center',
     fontSize: 14,
-    opacity: 0.8,
+    lineHeight: 20,
   },
 });
