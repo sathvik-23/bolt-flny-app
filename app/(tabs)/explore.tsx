@@ -35,9 +35,9 @@ const images = [
   require('../../assets/FLNY-M-Pics/Old money aesthetic, internet personality….jpeg'),
 ];
 
-const numColumns = 2;
+const numColumns = 3;
 const screenWidth = Dimensions.get('window').width;
-const cardSpacing = 12;
+const cardSpacing = 2;
 const cardWidth = (screenWidth - cardSpacing * (numColumns + 1)) / numColumns;
 
 export default function ExploreScreen() {
@@ -76,14 +76,13 @@ const styles = StyleSheet.create({
     paddingTop: 8,
   },
   card: {
-    borderRadius: 18,
+    borderRadius: 0,
     overflow: 'hidden',
     marginBottom: cardSpacing,
-    height: cardWidth * 1.3,
+    height: cardWidth,
   },
   cardImage: {
     width: '100%',
     height: '100%',
-    borderRadius: 18,
   },
 });
